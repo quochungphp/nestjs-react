@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
+import * as path from 'path';
 type TypeOrmConfig = TypeOrmModuleOptions & {
   seeds: string[];
   factories: string[];
@@ -108,25 +109,30 @@ export class ConfigService {
 
   get mysqlConfig(): TypeOrmConfig {
     const entities = [
-      __dirname + '/../../../modules/**/*.entity{.ts,.js}',
-      __dirname + '/../../../modules/**/*.view-entity{.ts,.js}',
+      path.join(__dirname + '/../../../**/*.entity{.ts,.js}'),
+      path.join(__dirname + '/../../../**/*.view-entity{.ts,.js}'),
     ];
-
-    const migrations = [__dirname + '/../../../database/migrations/*{.ts,.js}'];
-    const seeds = [__dirname + '/../../../database/seeds/*{.ts,.js}'];
-    const factories = [__dirname + '/../../../database/factories/*{.ts,.js}'];
-
+    const migrations = [
+      path.join(__dirname + '/../../../../database/migrations/*{.ts,.js}'),
+    ];
+    const seeds = [path.join(__dirname + '/../../../**/*.seed{.ts,.js}')];
+    const factories = [
+      path.join(__dirname + '/../../../**/*.factory{.ts,.js}'),
+    ];
     const config: TypeOrmConfig = {
       entities,
       migrations,
-      dropSchema: false,
       type: 'mysql',
       host: this.mysqlHost,
       port: this.mysqlPort,
       username: this.mysqlUsername,
       password: this.mysqlPassword,
       database: this.mysqlDatabase,
+      synchronize: false,
       subscribers: [],
+      cli: {
+        migrationsDir: 'src/database/migrations', // only effect in local development
+      },
       migrationsRun: false,
       seeds,
       factories,

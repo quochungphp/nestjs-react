@@ -21,7 +21,7 @@ export abstract class AbstractEntity
     update: false,
     insert: false,
     select: true,
-    type: 'timestamptz',
+    type: 'timestamp',
   })
   createdAt: Date;
 
@@ -30,7 +30,7 @@ export abstract class AbstractEntity
     insert: false,
     select: true,
     nullable: true,
-    type: 'timestamptz',
+    type: 'timestamp',
   })
   updatedAt?: Date;
 }
