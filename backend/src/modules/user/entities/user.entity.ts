@@ -8,7 +8,7 @@ export enum LOGIN_PROVIDER {
 }
 export const USER_TABLE = 'user';
 
-@Entity()
+@Entity(USER_TABLE)
 export class UserEntity extends AbstractEntity {
   @Column({ type: 'varchar', length: 50 })
   firstName: string;

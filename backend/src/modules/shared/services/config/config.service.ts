@@ -6,6 +6,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
+
 type TypeOrmConfig = TypeOrmModuleOptions & {
   seeds: string[];
   factories: string[];
@@ -41,6 +42,30 @@ export class ConfigService {
       : ['http://localhost:3000'];
   }
 
+  get jwtSecret(): string {
+    return process.env.JWT_SECRET || this.envConfig['JWT_SECRET'] || 'test';
+  }
+
+  get accessTokenExpiry(): string {
+    return (
+      process.env.ACCESS_TOKEN_EXPIRY ||
+      this.envConfig['ACCESS_TOKEN_EXPIRY'] ||
+      '7d'
+    );
+  }
+  get saltRounds(): number {
+    return this.int(
+      process.env.SALT_ROUNDS || this.envConfig['SALT_ROUNDS'],
+      10,
+    );
+  }
+  get preHashSalt(): string {
+    return (
+      process.env.PRE_HASH_SALT ||
+      this.envConfig['PRE_HASH_SALT'] ||
+      'test-hash'
+    );
+  }
   get env(): string {
     return this.envConfig['environment'] || 'local';
   }
