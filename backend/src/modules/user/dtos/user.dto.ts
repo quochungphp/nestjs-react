@@ -10,6 +10,7 @@ export class UserDto extends AbstractDto {
   lastName: string;
   @ApiProperty()
   username: string;
+
   @Exclude()
   password: string;
   @ApiProperty()

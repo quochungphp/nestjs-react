@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MinLength } from 'class-validator';
 import { Match } from '../../../decorators/match.decorator';
 
-export class UserSignupDto {
+export class UserChangePasswordDto {
   @ApiProperty()
   @IsString()
   @MinLength(6)
@@ -11,6 +11,6 @@ export class UserSignupDto {
   @ApiProperty()
   @IsString()
   @MinLength(6)
-  @Match('password')
+  @Match('password', { message: 'Password is not match' })
   passwordConfirm: string;
 }

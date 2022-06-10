@@ -21,7 +21,7 @@ export class AuthValidateAction {
     const user = await this.userRepository.findOne({ username });
     if (user) {
       await this.comparePassword(password, user.password || '');
-      return <UserDto>omit(user, 'password');
+      return <UserDto>(<unknown>omit(user, 'password'));
     }
 
     throw new NotFoundException('User', 'User not found');

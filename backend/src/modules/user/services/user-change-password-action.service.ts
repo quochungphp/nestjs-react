@@ -1,13 +1,18 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { omit } from 'lodash';
 import { Repository } from 'typeorm';
 import { hashAndValidatePassword } from '../../../utils/hash-user';
 import { RequestContext } from '../../../utils/request-context';
 import { ConfigService } from '../../shared/services/config/config.service';
-import { UserSignupDto } from '../dtos/user-signup.dto';
+import { UserChangePasswordDto } from '../dtos/user-change-pasword.dto';
 import { UserDto } from '../dtos/user.dto';
-import { LOGIN_PROVIDER, UserEntity } from '../entities/user.entity';
+import { UserEntity } from '../entities/user.entity';
 
 @Injectable()
 export class UserChangePasswordAction {
@@ -20,39 +25,23 @@ export class UserChangePasswordAction {
   ) {}
   async execute(
     context: RequestContext,
-    payload: UserSignupDto,
+    payload: UserChangePasswordDto,
   ): Promise<UserDto> {
-    const { email, password } = payload;
-    const { correlationId } = context;
-    const checkExistedUser = await this.userRepository.findOne({ email });
-    if (checkExistedUser) {
-      throw new ConflictException('User has already conflicted');
+    const { password } = payload;
+    const { user } = context;
+    const checkUser = await this.userRepository.findOne({
+      email: user.email,
+    });
+
+    if (!checkUser) {
+      throw new NotFoundException('User not found');
     }
 
     const { saltRounds } = this.configService;
     const hashPass = await hashAndValidatePassword(password, saltRounds);
+    checkUser.password = hashPass;
+    checkUser.save();
 
-    const user = await this.userRepository.save({
-      ...payload,
-      password: hashPass,
-      provider: LOGIN_PROVIDER.PASSWORD,
-    });
-    const { jwtSecret, accessTokenExpiry } = this.configService;
-    const userToken = {
-      ...user,
-      sessionId: correlationId,
-    };
-
-    const token = this.jwtService.sign(userToken, {
-      secret: jwtSecret,
-      expiresIn: accessTokenExpiry,
-    });
-
-    const data = {
-      ...user,
-      token,
-    };
-
-    return data;
+    return <UserDto>(<unknown>omit(user, 'password'));
   }
 }
