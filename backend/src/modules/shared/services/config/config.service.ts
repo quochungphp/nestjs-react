@@ -92,7 +92,7 @@ export class ConfigService {
   }
 
   get port(): number {
-    return this.int(this.envConfig['port'], 8081);
+    return this.int(this.envConfig['port'], 8282);
   }
 
   get corsAllowedOrigins(): string[] | string {
@@ -108,7 +108,7 @@ export class ConfigService {
   }
 
   get apiVersion(): string {
-    return this.envConfig['apiVersion'] || 'v1';
+    return this.envConfig['apiVersion'] || 'api/v1';
   }
 
   get region(): string {

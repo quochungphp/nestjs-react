@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import * as bunyan from 'bunyan';
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 
 import pretty = require('@mechanicalhuman/bunyan-pretty');
 
@@ -196,7 +196,7 @@ const logLevel: bunyan.LogLevelString = isLogLevel(LOG_LEVEL)
   : 'debug';
 
 export const rootLogger: Logger = bunyan.createLogger({
-  name: 'myria-marketplace-service',
+  name: 'viact',
   stream: pretty(process.stdout, {
     level: 0, // Named level or bunyan/pino level value
     strict: false,
