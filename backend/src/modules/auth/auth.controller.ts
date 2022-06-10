@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   HttpCode,
   HttpStatus,
   Post,
@@ -8,12 +9,17 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AppRequest } from '../../utils/app-request';
+import { AuthJwtGuard } from './guards/auth-jwt.guard';
 import { AuthSigninGuard } from './guards/auth-signin.guard';
-import { AuthSigninAction } from './services/auth-signin-action.service';
+import { AuthSignInAction } from './services/auth-signin-action.service';
+import { AuthSignOutAction } from './services/auth-signout-action.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authSignInAction: AuthSigninAction) {}
+  constructor(
+    private authSignInAction: AuthSignInAction,
+    private authSignOutAction: AuthSignOutAction,
+  ) {}
   @UseGuards(AuthSigninGuard)
   @HttpCode(HttpStatus.OK)
   @Post('')
@@ -29,5 +35,12 @@ export class AuthController {
     request.res?.setHeader('refreshToken', refreshToken);
 
     return user;
+  }
+
+  @UseGuards(AuthJwtGuard)
+  @Delete('')
+  @HttpCode(HttpStatus.OK)
+  async blackList(@Req() request: AppRequest) {
+    return this.authSignOutAction.execute(request);
   }
 }

@@ -7,7 +7,7 @@ import { AuthRefreshTokenDto } from '../dtos/auth-refesh-token.dto';
 import { AuthSigninDto } from '../dtos/auth-sign.dto';
 
 @Injectable()
-export class AuthSigninAction {
+export class AuthSignInAction {
   constructor(private jwtService: JwtService) {}
 
   async execute(context: RequestContext): Promise<AuthSigninDto> {

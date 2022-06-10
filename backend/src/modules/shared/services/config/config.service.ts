@@ -41,7 +41,14 @@ export class ConfigService {
       ? value.split(',').map((name) => name.trim())
       : ['http://localhost:3000'];
   }
-
+  get timeToLive(): number {
+    return this.int(
+      this.envConfig[
+        process.env.REDIS_CACHE_EXPIRES_IN || 'REDIS_CACHE_EXPIRES_IN'
+      ],
+      60 * 60 * 24 * 7,
+    );
+  }
   get jwtSecret(): string {
     return process.env.JWT_SECRET || this.envConfig['JWT_SECRET'] || 'test';
   }
