@@ -17,3 +17,10 @@ npm run migration
 npm run start:dev
 
 ```
+
+# test case
+
+```bash
+npm run test
+
+```
