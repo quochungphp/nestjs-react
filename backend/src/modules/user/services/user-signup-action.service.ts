@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 import { hashAndValidatePassword } from '../../../utils/hash-user';
 import { RequestContext } from '../../../utils/request-context';
 import { ConfigService } from '../../shared/services/config/config.service';
@@ -22,9 +22,18 @@ export class UserSignupAction {
     context: RequestContext,
     payload: UserSignupDto,
   ): Promise<UserDto> {
-    const { email, password } = payload;
+    const { email, password, username } = payload;
     const { correlationId } = context;
-    const checkExistedUser = await this.userRepository.findOne({ email });
+    const checkExistedUser = await this.userRepository
+      .createQueryBuilder()
+      .orWhere({
+        email,
+      })
+      .orWhere({
+        username,
+      })
+      .getOne();
+
     if (checkExistedUser) {
       throw new ConflictException('User has already conflicted');
     }
