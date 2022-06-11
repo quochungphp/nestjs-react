@@ -17,7 +17,7 @@ export class AuthAccessTokenDto {
   email: string;
 
   @ApiProperty()
-  phoneNumber: number;
+  phone: number;
 
   @ApiProperty()
   sessionId: string;

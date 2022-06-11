@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { omit } from 'lodash';
 import { RequestContext } from '../../../utils/request-context';
 import { UserDto } from '../../user/dtos/user.dto';
 import { AuthAccessTokenDto } from '../dtos/auth-access-token.dto';
@@ -20,7 +21,7 @@ export class AuthSignInAction {
     }
 
     const payloadAccessToken: AuthAccessTokenDto = {
-      ...user,
+      ...(omit<any>(user, 'password') as any),
       sessionId: correlationId,
     };
 
@@ -34,7 +35,6 @@ export class AuthSignInAction {
       sessionId: correlationId,
     };
     const refreshToken = this.jwtService.sign(payloadRefreshToken);
-
     const token: AuthSigninDto = {
       user: payloadAccessToken,
       accessToken,

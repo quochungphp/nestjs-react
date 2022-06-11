@@ -28,5 +28,5 @@ export class UserChangeProfileDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  phoneNumber: number;
+  phone: number;
 }

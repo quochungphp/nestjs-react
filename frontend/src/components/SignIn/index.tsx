@@ -9,17 +9,35 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { GoogleLogin } from 'react-google-login';
 import "./style.css";
+import { googleAppClientId } from "../../utils/envs";
+import { AuthSigninPayloadDto } from "../../domain";
+import { postSignInByPassword } from "../../reduxStore/signin-request-by-password/action";
+import { useDispatch, useSelector } from "react-redux";
+import {serverApi} from "../../resources/server-api"
+import { signInByPasswordSelector } from "../../reduxStore/signin-request-by-password/sliceReducer";
 export const SignIn = () => {
+  const dispatch = useDispatch();
+  const initialState = useSelector(signInByPasswordSelector);
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    if (username && password) {
+      const payload: AuthSigninPayloadDto = {
+        username,
+        password,
+      };
+      dispatch(postSignInByPassword(payload));
+    }
   };
-
+  React.useEffect(() => {
+    const accessToken = serverApi.getAccessToken();
+    if (accessToken) {
+      window.location.href = '/';
+    }
+  }, []);
   return (
     <Container
       component="main"
@@ -35,7 +53,7 @@ export const SignIn = () => {
       <CssBaseline />
       <Box
         sx={{
-          marginTop: 3,
+          marginTop: 1,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -59,11 +77,12 @@ export const SignIn = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
+              onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -74,6 +93,7 @@ export const SignIn = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Grid container>
               <Grid item xs>
@@ -115,26 +135,22 @@ export const SignIn = () => {
             >
               Sign In
             </Button>
-            <Grid item xs={12}>
+            <Grid item xs={12} mb={2}>
               <Typography className="textSubColor" textAlign={"center"}>
                 OR
               </Typography>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                mt: 1,
-                mb: 2,
-                background: "red",
-                height: "50px",
-                verticalAlign: "center",
+            <GoogleLogin
+              style={{
+                marginTop: '1cm'
               }}
-              size="large"
-            >
-              Google
-            </Button>
+              clientId={googleAppClientId}
+              buttonText="Sign in With Google"
+              // onSuccess={responseGoogle}
+              // onFailure={responseGoogle}
+              cookiePolicy={'single_host_origin'}
+              className="btn-google"
+            />
 
             <Grid item xs={12}>
               <Typography className="textSubColor" textAlign={"center"}>

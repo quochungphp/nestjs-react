@@ -49,7 +49,6 @@ describe('AuthController', () => {
           email: `${time}@gmail.com`,
           firstName: 'Lo',
           lastName: 'Rem',
-          password: expect.any(String),
           phone: 123456789,
           username: `${time}@gmail.com`,
           provider: 'PASSWORD',

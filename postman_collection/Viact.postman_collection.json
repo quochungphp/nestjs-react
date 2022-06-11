@@ -199,7 +199,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"firstName\": \"Le 1\",\n    \"lastName\": \"Hung 1\",\n    \"email\": \"quochungphp1@gmail.com\",\n    \"phoneNumber\" : 123456789\n}",
+					"raw": "{\n    \"firstName\": \"Le 1\",\n    \"lastName\": \"Hung 1\",\n    \"email\": \"quochungphp1@gmail.com\",\n    \"phone\" : 123456789\n}",
 					"options": {
 						"raw": {
 							"language": "json"

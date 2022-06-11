@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { omit } from 'lodash';
 import { Equal, Repository } from 'typeorm';
 import { hashAndValidatePassword } from '../../../utils/hash-user';
 import { RequestContext } from '../../../utils/request-context';
@@ -46,6 +47,7 @@ export class UserSignupAction {
       password: hashPass,
       provider: LOGIN_PROVIDER.PASSWORD,
     });
+
     const { jwtSecret, accessTokenExpiry } = this.configService;
     const userToken = {
       ...user,
@@ -57,8 +59,8 @@ export class UserSignupAction {
       expiresIn: accessTokenExpiry,
     });
 
-    const data = {
-      ...user,
+    const data = <UserDto>{
+      ...omit<UserDto>(user, 'password'),
       token,
     };
 
