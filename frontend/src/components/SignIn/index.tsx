@@ -12,16 +12,19 @@ import Container from "@mui/material/Container";
 import { GoogleLogin } from 'react-google-login';
 import "./style.css";
 import { googleAppClientId } from "../../utils/envs";
-import { AuthSigninPayloadDto } from "../../domain";
+import { AuthSigninPayloadDto, ErrorResponse } from "../../domain";
 import { postSignInByPassword } from "../../reduxStore/signin-request-by-password/action";
 import { useDispatch, useSelector } from "react-redux";
 import {serverApi} from "../../resources/server-api"
 import { signInByPasswordSelector } from "../../reduxStore/signin-request-by-password/sliceReducer";
+import { Alert } from "@mui/material";
 export const SignIn = () => {
   const dispatch = useDispatch();
   const initialState = useSelector(signInByPasswordSelector);
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [errors, setErrors] = React.useState<ErrorResponse[]>();
+  const [status, setStatus] = React.useState('');
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username && password) {
@@ -33,11 +36,19 @@ export const SignIn = () => {
     }
   };
   React.useEffect(() => {
-    const accessToken = serverApi.getAccessToken();
-    if (accessToken) {
+    if (initialState.data.status) {
+      setErrors(initialState.data.errors)
+      setStatus(initialState.data.status)
+    }
+  }, [initialState]);
+  
+  const accessToken = serverApi.getAccessToken();
+  React.useEffect(() => {
+    
+    if (status === 'success' || accessToken) {
       window.location.href = '/';
     }
-  }, []);
+  }, [status, accessToken]);
   return (
     <Container
       component="main"
@@ -72,7 +83,10 @@ export const SignIn = () => {
           Welcome Back
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
           <Grid container spacing={2}>
+            {status === 'error' && <Alert sx={{marginTop: 1}} severity="error" className="alertError">Username and Password are not correct!</Alert>}
+
             <TextField
               margin="normal"
               required

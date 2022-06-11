@@ -1,5 +1,5 @@
 export interface RequestState {
-    status: RequestStatus;
+    request: RequestStatus;
     loading: boolean;
   }
   

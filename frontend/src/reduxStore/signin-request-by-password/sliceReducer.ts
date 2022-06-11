@@ -14,7 +14,7 @@ export interface SignInByPasswordState extends RequestState {
 }
 
 export const initialState: SignInByPasswordState = {
-  status: RequestStatus.idle,
+  request: RequestStatus.idle,
   loading: false,
   data: <UserResponseDto>{},
   isAuth: false
@@ -26,17 +26,21 @@ export const signInByPasswordSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(postSignInByPassword.pending, (state) => {
-      state.status = RequestStatus.requesting;
+      state.request = RequestStatus.requesting;
       state.loading = true;
     });
     builder.addCase(postSignInByPassword.fulfilled, (state, { payload }) => {
-      state.status = RequestStatus.success;
+      state.request = RequestStatus.success;
       state.loading = false;
       state.data = payload;
-      state.isAuth = true
+      if (payload.status && payload.status === 'success') {
+        state.isAuth = true
+      } else {
+        state.isAuth = false
+      }      
     });
     builder.addCase(postSignInByPassword.rejected, (state) => {
-      state.status = RequestStatus.failed;
+      state.request = RequestStatus.failed;
       state.loading = false;
     });
   },
