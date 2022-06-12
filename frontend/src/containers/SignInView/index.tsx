@@ -1,7 +1,7 @@
 import React from "react";
 import { SignIn } from "../../components/SignIn";
 import "./style.css";
-function SignInView(props: any) {
+const SignInView = () => {
   return (
     <React.Fragment>
         <SignIn />

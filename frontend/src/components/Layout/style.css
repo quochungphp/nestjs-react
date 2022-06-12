@@ -26,9 +26,7 @@ body {
   margin: "0 auto";
   padding: "8px";
 }
-.appHeader {
-  background-color: rgb(34 108 124);
-}
+
 .cardPricing {
   display: "flex";
   justify-content: "center";
@@ -43,13 +41,4 @@ body {
   margin-top: "8px";
   border-top: "1px solid #ccc";
   padding: "8px";
-}
-
-header .signin {
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: 2px solid #fff;
-}
-header .signin:hover {
-  background-color: #ff6a3d;
 }

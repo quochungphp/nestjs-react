@@ -13,5 +13,6 @@ export interface RequestState {
   export enum ACTION_TYPE {
     POST_SIGNIN_PASSWORD = "POST_SIGNIN_PASSWORD",
     POST_SIGNIN_GOOGLE = "POST_SIGNIN_GOOGLE",
+    POST_SIGN_UP = "POST_SIGN_UP",
   }
   

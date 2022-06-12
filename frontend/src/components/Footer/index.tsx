@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@mui/styles";
 import Container from "@mui/material/Container";
 import { Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -29,7 +28,7 @@ const footers = [
   },
 ];
 ;
-export const Footer = ({ children }: any) => {
+const Footer = ({ children }: any) => {
   return (
     <Container
       maxWidth={false}
@@ -63,3 +62,4 @@ export const Footer = ({ children }: any) => {
     </Container>
   );
 };
+export default Footer;

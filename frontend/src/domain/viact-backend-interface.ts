@@ -32,3 +32,12 @@ export interface ErrorResponse {
   timestamp: Date;
   path: string;
 }
+
+export interface UserSignUpPayloadDto {
+  email: string;
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone: number;
+}

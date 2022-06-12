@@ -1,5 +1,14 @@
 # viact-nestjs-react
 
+# 1. Setup Backend
+
+```bash
+cd backend/
+
+npm install
+
+```
+
 # docker
 
 ```bash
@@ -22,5 +31,16 @@ npm run start:dev
 
 ```bash
 npm run test
+
+```
+
+# 2. Setup Frontend
+
+```bash
+cd frontend/
+
+npm install
+
+npm run start
 
 ```
